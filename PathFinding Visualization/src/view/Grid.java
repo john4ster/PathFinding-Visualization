@@ -18,15 +18,12 @@ public class Grid extends JPanel {
 	int width; //Width of the grid, same width as the frame
 	int height; //Height of the grid, same height as the frame
 	Timer timer;
-	Menu menu; //Menu for the player to select algorithm
 	
 	public Grid(int width, int height) {
 		this.width = width;
 		this.height = height;
 		aStarPathfinding = new AStarPathFinding(width, height, cellSize);
 		timer = new Timer(10, updateVisual);
-		menu = new Menu();
-		this.add(menu);
 	}
 	
 	public void startVisualization() {
@@ -145,18 +142,16 @@ public class Grid extends JPanel {
 	
 	ActionListener updateVisual = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (menu.getSelectedAlgorithm() == "A* Algorithm") {
-				if (!aStarPathfinding.endFound() && !aStarPathfinding.noPathFound()) {
-					aStarPathfinding.oneStep();
-				}
-				else if (aStarPathfinding.endFound()){
-					System.out.println("Path found");
-					timer.stop();
-				}
-				else if (aStarPathfinding.noPathFound()) {
+			if (!aStarPathfinding.endFound() && !aStarPathfinding.noPathFound()) {
+				aStarPathfinding.oneStep();
+			}
+			else if (aStarPathfinding.endFound()){
+				System.out.println("Path found");
+				timer.stop();
+			}
+			else if (aStarPathfinding.noPathFound()) {
 					System.out.println("No path found");
 					timer.stop();
-				}
 			}
 			repaint();
 		}
