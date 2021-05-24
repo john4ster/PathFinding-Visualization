@@ -1,30 +1,36 @@
-package pathfinding;
+package view;
+import model.*;
 
 import java.awt.*;
-
-import javax.swing.Timer;
-
 import java.awt.event.*;
 
+import javax.swing.Timer;
 import javax.swing.JPanel;
+
+/* This class is the main GUI component on top of the Frame. The grid shows and
+ * updates the visualization of the algorithm as it runs.
+ */
 
 public class Grid extends JPanel {
 
-	AStarPathFinding pathfinding;
+	AStarPathFinding aStarPathfinding;
 	int cellSize = 20; //Size of each cell in the grid
 	int width; //Width of the grid, same width as the frame
 	int height; //Height of the grid, same height as the frame
 	Timer timer;
+	Menu menu; //Menu for the player to select algorithm
 	
 	public Grid(int width, int height) {
 		this.width = width;
 		this.height = height;
-		pathfinding = new AStarPathFinding(width, height, cellSize);
+		aStarPathfinding = new AStarPathFinding(width, height, cellSize);
 		timer = new Timer(10, updateVisual);
+		menu = new Menu();
+		this.add(menu);
 	}
 	
 	public void startVisualization() {
-		pathfinding.setup(); //Setup the algorithm
+		aStarPathfinding.setup(); //Setup the algorithm
 		timer.start(); //Run the algorithm one step at a time through the timer
 	}
 	
@@ -37,8 +43,8 @@ public class Grid extends JPanel {
 		
 		//Draw open nodes
 		g.setColor(Color.GREEN);
-		if (pathfinding.getOpenSet() != null) {
-			for (Node node : pathfinding.getOpenSet()) {
+		if (aStarPathfinding.getOpenSet() != null) {
+			for (Node node : aStarPathfinding.getOpenSet()) {
 				int x = node.getX();
 				int y = node.getY();
 				g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -47,8 +53,8 @@ public class Grid extends JPanel {
 				
 		//Draw closed nodes
 		g.setColor(Color.PINK);
-		if (pathfinding.getClosedSet() != null) {
-			for (Node node : pathfinding.getClosedSet()) {
+		if (aStarPathfinding.getClosedSet() != null) {
+			for (Node node : aStarPathfinding.getClosedSet()) {
 				int x = node.getX();
 				int y = node.getY();
 				g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -57,8 +63,8 @@ public class Grid extends JPanel {
 		
 		//Draw path
 		g.setColor(Color.CYAN);
-		if (pathfinding.getPath() != null) {
-			for (Node node : pathfinding.getPath()) {
+		if (aStarPathfinding.getPath() != null) {
+			for (Node node : aStarPathfinding.getPath()) {
 				int x = node.getX();
 				int y = node.getY();
 				g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -66,7 +72,7 @@ public class Grid extends JPanel {
 		}
 		
 		//Draw start node
-		Node startNode = pathfinding.getStart();
+		Node startNode = aStarPathfinding.getStart();
 		//Make sure user has placed start node
 		if (startNode.getX() != -1 && startNode.getY() != -1) {
 			g.setColor(Color.BLUE);
@@ -74,7 +80,7 @@ public class Grid extends JPanel {
 		}
 		
 		//Draw end node
-		Node endNode = pathfinding.getEnd();
+		Node endNode = aStarPathfinding.getEnd();
 		//Make sure user has placed end node
 		if (endNode.getX() != -1 && endNode.getY() != -1) {
 			g.setColor(Color.RED);
@@ -84,15 +90,14 @@ public class Grid extends JPanel {
 		//Draw the grid lines
 		g.setColor(Color.BLACK);
 		for (int x = 0; x < width; x+= cellSize) { //Vertical grid lines
-			g.drawLine(x, 0, x, height);
-									
+			g.drawLine(x, 0, x, height);						
 		}
 		for (int y = 0; y < height; y+= cellSize) { //Horizontal grid lines
 			g.drawLine(0,  y, width, y);
 		}
 		
 		//Draw borders
-		for (Node border : pathfinding.getBorders()) {
+		for (Node border : aStarPathfinding.getBorders()) {
 			int x = border.getX();
 			int y = border.getY();
 			g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -105,7 +110,7 @@ public class Grid extends JPanel {
 		int xCord = x / cellSize; 
 		int yCord = (y / cellSize) - 1;
 		//Add the borders to path finding and repaint
-		pathfinding.addBorder(xCord, yCord);
+		aStarPathfinding.addBorder(xCord, yCord);
 		repaint();
 	}
 	
@@ -115,7 +120,7 @@ public class Grid extends JPanel {
 		int xCord = x / cellSize; 
 		int yCord = (y / cellSize) - 1;
 		//Remove the border from path finding and repaint
-		pathfinding.removeBorder(xCord, yCord);
+		aStarPathfinding.removeBorder(xCord, yCord);
 		repaint();
 	}
 	
@@ -125,7 +130,7 @@ public class Grid extends JPanel {
 		int xCord = x / cellSize;
 		int yCord = (y / cellSize) - 1;
 		
-		pathfinding.setStart(xCord, yCord);
+		aStarPathfinding.setStart(xCord, yCord);
 		repaint();
 	}
 	
@@ -134,23 +139,24 @@ public class Grid extends JPanel {
 		//Convert mouse coordinates to grid coordinates
 		int xCord = x / cellSize;
 		int yCord = (y / cellSize) - 1;
-		pathfinding.setEnd(xCord, yCord);
+		aStarPathfinding.setEnd(xCord, yCord);
 		repaint();
 	}
 	
 	ActionListener updateVisual = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			//Moves the path finding algorithm forward one step at a time
-			if (!pathfinding.endFound() && !pathfinding.noPathFound()) {
-				pathfinding.oneStep();
-			}
-			else if (pathfinding.endFound()){
-				System.out.println("Path found");
-				timer.stop();
-			}
-			else if (pathfinding.noPathFound()) {
-				System.out.println("No path found");
-				timer.stop();
+			if (menu.getSelectedAlgorithm() == "A* Algorithm") {
+				if (!aStarPathfinding.endFound() && !aStarPathfinding.noPathFound()) {
+					aStarPathfinding.oneStep();
+				}
+				else if (aStarPathfinding.endFound()){
+					System.out.println("Path found");
+					timer.stop();
+				}
+				else if (aStarPathfinding.noPathFound()) {
+					System.out.println("No path found");
+					timer.stop();
+				}
 			}
 			repaint();
 		}

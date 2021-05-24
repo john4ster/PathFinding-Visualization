@@ -1,5 +1,6 @@
-package pathfinding;
+package view;
 import java.awt.*;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -9,10 +10,16 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.Timer;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+// This class creates the main JFrame for the GUI
+
 public class Frame extends JFrame {
+	
+	Grid grid; //Grid that displays the visualization
 	
 	public Frame(int width, int height) {
 		
@@ -21,10 +28,13 @@ public class Frame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Pathfinding Visualization");
 		this.setVisible(true);
+		this.setLayout(null);
 		
 		//Create and display the grid
-		Grid grid = new Grid(width, height);
-		this.setContentPane(grid);
+		grid = new Grid(width, height);
+		grid.setBounds(0, 0, width, height);
+		this.add(grid);
+		repaint();
 		
 		//Set up mouse listener to draw and remove borders
 		//Remember to add a normal mouse adapter
@@ -37,9 +47,11 @@ public class Frame extends JFrame {
 				
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					grid.drawBorder(x, y);
+					repaint();
 				}
 				else if (SwingUtilities.isRightMouseButton(e)) {
 					grid.removeBorder(x, y);
+					repaint();
 				}
 			}
 
@@ -61,15 +73,17 @@ public class Frame extends JFrame {
 					int y = (int) MouseInfo.getPointerInfo().getLocation().getY();
 					grid.removeBorder(x, y); //This doesn't work visually
 					grid.setStart(x, y);
+					repaint();
 				}
 				else if (e.getKeyCode() == KeyEvent.VK_E) {
 					int x = (int) MouseInfo.getPointerInfo().getLocation().getX();
 					int y = (int) MouseInfo.getPointerInfo().getLocation().getY();
 					grid.removeBorder(x, y); //This doesn't work visually
 					grid.setEnd(x, y);
+					repaint();
 				}
 				else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					grid.startVisualization();;
+					grid.startVisualization();
 				}
 				
 			}
@@ -78,7 +92,6 @@ public class Frame extends JFrame {
 			public void keyReleased(KeyEvent e) {}
 			
 		});
-		
 	}
 	
 }

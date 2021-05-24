@@ -1,9 +1,11 @@
-package pathfinding;
+package model;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.concurrent.TimeUnit;
+
+// Class for the AStarPathFinding algorithm
 
 public class AStarPathFinding {
 
@@ -19,14 +21,14 @@ public class AStarPathFinding {
 	int windowHeight; 
 	int cellSize;
 	
-	public AStarPathFinding(int width, int height, int cellSize) {
+	public AStarPathFinding(int windowWidth, int windowHeight, int cellSize) {
 		//Initialize variables
 		openSet = new PriorityQueue<Node>();
 		closedSet = new ArrayList<Node>();
 		borders = new ArrayList<Node>();
 		path = new ArrayList<Node>();
-		windowWidth = width;
-		windowHeight = height;
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
 		this.cellSize = cellSize;
 		//Initialize start and end nodes, (-1, -1) are placeholder coordinates for when the
 		//user hasn't placed a start/end node yet

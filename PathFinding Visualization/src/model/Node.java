@@ -1,5 +1,7 @@
-package pathfinding;
+package model;
 import java.util.ArrayList;
+
+// Node class used in the algorithm
 
 public class Node implements Comparable<Node>{
 

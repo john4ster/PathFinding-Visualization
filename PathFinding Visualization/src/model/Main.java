@@ -1,4 +1,8 @@
-package pathfinding;
+package model;
+
+import view.Frame;
+
+// Main class, creates a Frame object, which starts the program
 
 public class Main {
 
