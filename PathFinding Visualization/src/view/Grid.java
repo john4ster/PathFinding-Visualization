@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.Timer;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /* This class is the main GUI component on top of the Frame. The grid shows and
@@ -17,13 +18,22 @@ public class Grid extends JPanel {
 	int cellSize = 20; //Size of each cell in the grid
 	int width; //Width of the grid, same width as the frame
 	int height; //Height of the grid, same height as the frame
-	Timer timer;
+	Timer timer; //Timer that will move the algorithm forward one step at a time
+	JLabel successMessage; //Message that will display when the algorithm finds a path
+	JLabel failMessage; //Message that will display when the algorithm finds no path
 	
 	public Grid(int width, int height) {
+		//Initialize variables
 		this.width = width;
 		this.height = height;
 		aStarPathfinding = new AStarPathFinding(width, height, cellSize);
+		//Set up timer, this will move the algorithm forward one step at a time
 		timer = new Timer(10, updateVisual);
+		//Set up success and fail messages
+		successMessage = new JLabel("Path found", JLabel.CENTER);
+		failMessage = new JLabel("No path found", JLabel.CENTER);
+		successMessage.setFont(new Font("Calibri", Font.PLAIN, 30));
+		failMessage.setFont(new Font("Calibri", Font.PLAIN, 30));
 	}
 	
 	public void startVisualization() {
@@ -87,7 +97,7 @@ public class Grid extends JPanel {
 		//Draw the grid lines
 		g.setColor(Color.BLACK);
 		for (int x = 0; x < width; x+= cellSize) { //Vertical grid lines
-			g.drawLine(x, 0, x, height);						
+			g.drawLine(x, 0, x, height);
 		}
 		for (int y = 0; y < height; y+= cellSize) { //Horizontal grid lines
 			g.drawLine(0,  y, width, y);
@@ -140,18 +150,40 @@ public class Grid extends JPanel {
 		repaint();
 	}
 	
+	//Method to clear messages from running the algorithm previously
+	public void clearPreviousMessages() {
+		this.remove(successMessage);
+		this.remove(failMessage);
+	}
+	
+	//Displays message that a path was found
+	public void displaySuccessMessage() {
+		clearPreviousMessages();
+		this.add(successMessage);
+		revalidate();
+	}
+	
+	//Displays message that no path was found
+	public void displayFailMessage() {
+		clearPreviousMessages();
+		this.add(failMessage);
+		revalidate();
+	}
+	
+	//This ActionListener is used by the timer to move the algorithm forward
+	//one step at a time
 	ActionListener updateVisual = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (!aStarPathfinding.endFound() && !aStarPathfinding.noPathFound()) {
 				aStarPathfinding.oneStep();
 			}
 			else if (aStarPathfinding.endFound()){
-				System.out.println("Path found");
+				displaySuccessMessage();
 				timer.stop();
 			}
 			else if (aStarPathfinding.noPathFound()) {
-					System.out.println("No path found");
-					timer.stop();
+				displayFailMessage();
+				timer.stop();
 			}
 			repaint();
 		}
