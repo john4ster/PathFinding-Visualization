@@ -25,15 +25,16 @@ public class Frame extends JFrame {
 		
 		//Create and display the frame
 		this.setSize(width, height);
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Pathfinding Visualization");
 		this.setVisible(true);
-		this.setLayout(null);
 		
 		//Create and display the grid
 		grid = new Grid(width, height);
-		grid.setBounds(0, 0, width, height);
+		grid.setPreferredSize(new Dimension(width, height));
 		this.add(grid);
+		this.pack();
 		repaint();
 		
 		//Set up mouse listener to draw and remove borders
