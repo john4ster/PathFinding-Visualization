@@ -1,6 +1,8 @@
 # Pathfinding Visualization
 A Java program that provides a visualization of the A* PathFinding Algorithm. The user can set a start node, an end node, and draw walls between them and have the algorithm find the fastest path between the two nodes if a path is available.
 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/54284594/120079278-22acdb80-c081-11eb-98a1-6cecf0b3d4ce.gif)
+
 # How to use
 To use the application, place a start node, and end node, and some walls in between. The start node is dark blue, the end node is red, and the walls are black.
 
