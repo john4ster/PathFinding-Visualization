@@ -23,19 +23,20 @@ public class Frame extends JFrame {
 	
 	public Frame(int width, int height) {
 		
-		//Create and display the frame
+		//Create the frame
 		this.setSize(width, height);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Pathfinding Visualization");
-		this.setVisible(true);
 		
-		//Create and display the grid
+		//Create the grid
 		grid = new Grid(width, height);
 		grid.setPreferredSize(new Dimension(width, height));
 		this.add(grid);
+		
+		//Make the frame visible
 		this.pack();
-		repaint();
+		this.setVisible(true);
 		
 		//Set up mouse listener to draw and remove borders
 		//Remember to add a normal mouse adapter
@@ -59,7 +60,7 @@ public class Frame extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent e) {}
 		});
-		
+			
 		//Set up key listener to listen for placing start and end nodes
 		this.addKeyListener(new KeyListener() {
 

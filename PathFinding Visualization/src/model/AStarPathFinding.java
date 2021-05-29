@@ -40,10 +40,7 @@ public class AStarPathFinding {
 	//Sets the algorithm up to start
 	public void setup() {
 		//Clear any previous info from running the algorithm
-		openSet.clear();
-		closedSet.clear();
-		path.clear();
-		
+		reset();
 		//Add the startNode to open set, and make it the current node
 		openSet.add(startNode);
 		currNode = startNode;
@@ -122,6 +119,22 @@ public class AStarPathFinding {
 			return true;
 		}
 		return false;
+	}
+	
+	//Method to reset the algorithm
+	public void reset() {
+		for (Node node : openSet) {
+			node.resetNeighbors();
+		}
+		for (Node node : closedSet) {
+			node.resetNeighbors();
+		}
+		for (Node node : path) {
+			node.resetNeighbors();
+		}
+		openSet.clear();
+		closedSet.clear();
+		path.clear();
 	}
 	
 	//Methods to add and remove borders

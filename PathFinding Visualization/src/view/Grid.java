@@ -32,8 +32,8 @@ public class Grid extends JPanel {
 		//Set up success and fail messages
 		successMessage = new JLabel("Path found", JLabel.CENTER);
 		failMessage = new JLabel("No path found", JLabel.CENTER);
-		successMessage.setFont(new Font("Calibri", Font.PLAIN, 30));
-		failMessage.setFont(new Font("Calibri", Font.PLAIN, 30));
+		successMessage.setFont(new Font("Calibri", Font.PLAIN, 50));
+		failMessage.setFont(new Font("Calibri", Font.PLAIN, 50));
 	}
 	
 	public void startVisualization() {

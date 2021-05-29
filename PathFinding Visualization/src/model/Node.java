@@ -35,6 +35,11 @@ public class Node implements Comparable<Node>{
 		}
 	}
 	
+	//Reset neighbor nodes
+	public void resetNeighbors() {
+		neighbors = new ArrayList<Node>();
+	}
+	
 	//Method to compare f costs of nodes
 	@Override
 	public int compareTo(Node otherNode) {
